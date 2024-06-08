@@ -27,6 +27,7 @@ public class UrlMappingClickService {
 	}
 
 	public int findQuantityClick(String shortUrl) {
+		// criar processo de validação e tratamento de erro
 		return urlMappingClickRepository.findByUrlMapping_ShortUrl(shortUrl).size();
 	}
 

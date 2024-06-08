@@ -20,16 +20,15 @@ public class UrlMappingClick {
 
 	private LocalDateTime urlClickTime;
 
-	public UrlMappingClick(Long id, UrlMapping urlMapping, LocalDateTime urlClickTime) {
-		this.id = id;
+	public UrlMappingClick() {
+		
+	}
+	
+	public UrlMappingClick(UrlMapping urlMapping, LocalDateTime urlClickTime) {
 		this.urlMapping = urlMapping;
 		this.urlClickTime = urlClickTime;
 	}
 	
-	public UrlMappingClick() {
-		
-	}
-
 	public Long getId() {
 		return id;
 	}

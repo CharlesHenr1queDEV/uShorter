@@ -59,13 +59,8 @@ public class UrlMapping {
 		this.urlClicks = urlClicks;
 	}
 
-	public UrlMappingDTO parseUrlMappingDTO() {
-		UrlMappingDTO urlMappingDTO = new UrlMappingDTO();
-		urlMappingDTO.setOriginalUrl(originalUrl);
-		urlMappingDTO.setShortUrl(shortUrl);
-		urlMappingDTO.setUrlClickCount(urlClicks.size());
-
-		return urlMappingDTO;
+	public UrlMappingDTO toUrlMappingDTO() {
+		return new UrlMappingDTO(originalUrl, shortUrl);
 	}
 
 }
