@@ -9,5 +9,7 @@ import br.com.ushorter.model.UrlMapping;
 public interface UrlMappingRepository extends JpaRepository<UrlMapping, Long> {
 
 	public UrlMapping findByShortUrl(String shortUrl);
+	
+	public boolean existsByShortUrl(String shortUrl);
 
 }

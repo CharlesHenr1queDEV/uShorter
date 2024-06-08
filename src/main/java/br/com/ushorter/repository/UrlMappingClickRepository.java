@@ -11,5 +11,8 @@ import br.com.ushorter.model.UrlMappingClick;
 public interface UrlMappingClickRepository extends JpaRepository<UrlMappingClick, Long>{
 
    public List<UrlMappingClick> findByUrlMapping_ShortUrl(String shortUrl);
+   
+   public boolean existsByUrlMapping_ShortUrl(String shortUrl);
+
 
 }

@@ -3,13 +3,17 @@ package br.com.ushorter.model;
 import java.util.List;
 
 import br.com.ushorter.dto.UrlMappingDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(name = "url_mapping", uniqueConstraints = @UniqueConstraint(columnNames = "shortUrl"))
 public class UrlMapping {
 
 	@Id
@@ -18,6 +22,7 @@ public class UrlMapping {
 
 	private String originalUrl;
 
+	@Column(nullable = false, unique = true)
 	private String shortUrl;
 
 	@OneToMany(mappedBy = "urlMapping")
