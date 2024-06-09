@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -33,7 +32,6 @@ public class UrlMappingControllerTest {
 	@BeforeEach
 	@Test
 	public void saveUrlMaping_whenOriginalUrlIsValid_thenSuccess() throws Exception {
-		
 		OriginalUrlDTO originalUrlDTO = new OriginalUrlDTO("http://google.com");
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -49,7 +47,6 @@ public class UrlMappingControllerTest {
 
 	@Test
 	public void saveUrlMapping_whenOriginalUrlIsEmpty_thenError() throws Exception {
-		
 		OriginalUrlDTO originalUrlDTO = new OriginalUrlDTO("");
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -64,7 +61,6 @@ public class UrlMappingControllerTest {
 
 	@Test
 	public void saveUrlMapping_whenOriginalUrlIsNull_thenError() throws Exception {
-		
 		OriginalUrlDTO originalUrlDTO = new OriginalUrlDTO(null);
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -79,7 +75,6 @@ public class UrlMappingControllerTest {
 
 	@Test
 	public void saveUrlMapping_whenOriginalUrlIsNotAcessible_thenError() throws Exception {
-		
 		OriginalUrlDTO original = new OriginalUrlDTO("uol.rrr");
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -94,7 +89,6 @@ public class UrlMappingControllerTest {
 
 	@Test
 	public void saveUrlMapping_whenOriginalUrlNotExist_thenError() throws Exception {
-		
 		mock.perform(MockMvcRequestBuilders.post(END_POINT))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -102,7 +96,6 @@ public class UrlMappingControllerTest {
 	
 	@Test
 	public void redirectUrl_whenShortUrlIsValid_thenRedirect() throws Exception {
-		
 		UrlMapping urlMapping = urlMappingRepository.findAll().get(0);
 
 		mock.perform(MockMvcRequestBuilders.get(END_POINT + "{shortUrl}", urlMapping.getShortUrl())).andDo(MockMvcResultHandlers.print())
@@ -112,7 +105,6 @@ public class UrlMappingControllerTest {
 	
 	@Test
 	public void redirectUrl_whenShortUrlIsBlank_thenError() throws Exception {
-		
 		mock.perform(MockMvcRequestBuilders.get(END_POINT + "{shortUrl}", ""))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
@@ -120,7 +112,6 @@ public class UrlMappingControllerTest {
 	
 	@Test
 	public void redirectUrl_whenShortUrlNotExist_thenError() throws Exception {
-		
 		mock.perform(MockMvcRequestBuilders.get(END_POINT + "{shortUrl}", "notExist"))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
