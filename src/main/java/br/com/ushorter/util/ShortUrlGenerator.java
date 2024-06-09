@@ -10,6 +10,8 @@ public class ShortUrlGenerator {
 	private final Random random = new Random();
 
 	public String generateHash(String originalUrl) {
-		return Integer.toHexString(originalUrl.hashCode() + random.nextInt(1000));
+		URLService url = new URLService();
+		String longToShort = url.generateRandomShortUrl();
+		return longToShort;
 	}
 }

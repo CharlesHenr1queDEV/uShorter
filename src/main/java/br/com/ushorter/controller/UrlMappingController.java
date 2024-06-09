@@ -1,5 +1,8 @@
 package br.com.ushorter.controller;
 
+import java.net.URI;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,25 +32,27 @@ public class UrlMappingController {
 			@RequestHeader(name = "language", required = false) String language) {
 		try {
 			UrlMapping saveUrlMapping = urlMappingService.saveUrlMapping(originalUrlDTO, language);
-			return new ResponseEntity<>(saveUrlMapping, HttpStatus.OK);
+			return new ResponseEntity<>(saveUrlMapping, HttpStatus.CREATED);
 		} catch (UshorterException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	@GetMapping("/{shortUrl}")
-	public RedirectView redirectUrl(@PathVariable String shortUrl,
-			@RequestHeader(name = "language", required = false) String language) throws Exception {
-		try {
-			String originalUrl = urlMappingService.redirectUrl(shortUrl, language);
-			return new RedirectView(originalUrl);
-		} catch (UshorterException e) {
-			return new RedirectView("/error");
-		} catch (Exception e) {
-			return new RedirectView("/error");
-		}
+	public ResponseEntity<?> redirectUrl(@PathVariable String shortUrl,
+	        @RequestHeader(name = "language", required = false) String language) {
+	    try {
+	        String originalUrl = urlMappingService.redirectUrl(shortUrl, language);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setLocation(new URI(originalUrl));
+	        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+	    } catch (UshorterException e) {
+	        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
 	}
 
 }
