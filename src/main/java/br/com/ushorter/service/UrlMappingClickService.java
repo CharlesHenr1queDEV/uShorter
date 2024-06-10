@@ -2,8 +2,6 @@ package br.com.ushorter.service;
 
 import java.time.LocalDateTime;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import br.com.ushorter.model.UrlMapping;
@@ -14,8 +12,6 @@ import br.com.ushorter.service.validation.ValidationClickQuantityService;
 @Service
 public class UrlMappingClickService {
 	
-	private final Logger logger = LogManager.getLogger(UrlMappingClickService.class);
-
 	private UrlMappingClickRepository urlMappingClickRepository;
 	
 	private ValidationClickQuantityService validationClickQuantityService;

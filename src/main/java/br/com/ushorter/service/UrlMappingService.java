@@ -1,5 +1,7 @@
 package br.com.ushorter.service;
 
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -20,20 +22,20 @@ public class UrlMappingService {
 	private UrlMappingRepository urlMappingRepository;
 	
 	private UrlMappingClickService urlMappingClickService;
-	
 	private ShortUrlGenerator shortUrlGenerator;
-	
 	private ValidationRedirectUrlService validationRedirectUrlService;
-	
 	private ValidationUrlMappingService validationUrlMappingService;
-	
+	private RedisUrlMappingService redisUrlMappingService;
+
 	public UrlMappingService(UrlMappingRepository urlMappingRepository, UrlMappingClickService urlMappingClickService,
-			ShortUrlGenerator shortUrlGenerator, ValidationRedirectUrlService validationRedirectUrlService, ValidationUrlMappingService validationUrlMappingService) {
+			ShortUrlGenerator shortUrlGenerator, ValidationRedirectUrlService validationRedirectUrlService, ValidationUrlMappingService validationUrlMappingService
+			,RedisUrlMappingService redisUrlMappingService) {
 		this.urlMappingRepository = urlMappingRepository;
 		this.urlMappingClickService = urlMappingClickService;
 		this.shortUrlGenerator = shortUrlGenerator;
 		this.validationRedirectUrlService = validationRedirectUrlService;
 		this.validationUrlMappingService = validationUrlMappingService;
+		this.redisUrlMappingService = redisUrlMappingService;
 	}
 	
 	public UrlMapping saveUrlMapping(OriginalUrlDTO originalUrlRecord, String language) throws Exception {
@@ -45,15 +47,26 @@ public class UrlMappingService {
 		
 		UrlMappingDTO urlMappingDTO = new UrlMappingDTO(originalUrlRecord.url(), shortUrl);
 		
+		logger.info("[URL SERVICE] Salvando registro no banco");
+		UrlMapping urlMapping = urlMappingRepository.save(urlMappingDTO.parseUrlMapping());
+		
 		logger.info("[URL SERVICE] Processamento finalizado, gerando url curta");
-		return urlMappingRepository.save(urlMappingDTO.parseUrlMapping());
+		return urlMapping;
 	}
 	
 	public String redirectUrl(String shortUrl, String language) throws Exception {
+		logger.info("[URL SERVICE] Verificando se já existe registro no redis");
+		Optional<String> originalUrlFromCache = redisUrlMappingService.getOriginalUrlFromCache(shortUrl);
+		if(originalUrlFromCache.isPresent())
+			return originalUrlFromCache.get();
+		
 		logger.info("[URL SERVICE]  Iniciando validação para short url");
 		validationRedirectUrlService.executeValidations(shortUrl, language);
 		
 		UrlMapping urlMapping = urlMappingRepository.findByShortUrl(shortUrl);
+		
+		logger.info("[URL SERVICE] Salvando registro no cache");
+		redisUrlMappingService.saveUrlMappingInCache(urlMapping);
 		
 		logger.info("[URL SERVICE]  Registrando click na short Url: " + shortUrl);
 		urlMappingClickService.registerClick(urlMapping);
