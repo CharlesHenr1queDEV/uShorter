@@ -49,7 +49,7 @@ O projeto uShorter é um aplicativo de encurtamento de URL que permite aos usuá
 
 - Pegar o repositório do git e extrair em uma pasta local
      ```bash
-    git clone git clone https://github.com/CharlesHenr1queDEV/uShorter.git 
+    git clone https://github.com/CharlesHenr1queDEV/uShorter.git 
     ```
 - Navegar até a pasta 
     ```bash
@@ -69,7 +69,7 @@ O projeto uShorter é um aplicativo de encurtamento de URL que permite aos usuá
 ##### 3) Utilizando somente Docker compose
 
 - Baixar o arquivo docker-compose ou copiar o conteúdo
-   [Link: docker-compose]()
+   [Link: docker-compose](https://drive.google.com/file/d/17EDKTGdyUlp4pVvxmbzFbP7LgQxIBsIe/view?usp=sharing)
 - Executar o arquivo
     ```bash
     docker-compose up 
