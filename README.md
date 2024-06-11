@@ -44,8 +44,6 @@ O projeto uShorter é um aplicativo de encurtamento de URL que permite aos usuá
     - Certifique-se de ter o Docker e docker-compose instalado em sua maquina
     - Certifique-se de que as portas configuradas não estejam sendo utilizadas.
     - Configure as conexões do MySQL e Redis de acordo com sua necessidade.  Obs: Por padrão já está tudo configurado.
-- Acessar a documentação da API no swagger
-    - ``http://localhost:8080/swagger-ui/index.html``
 
 ##### 2) Utilizando uma IDE
 
@@ -67,8 +65,6 @@ O projeto uShorter é um aplicativo de encurtamento de URL que permite aos usuá
 - Executar o docker-compose somente o MySQL e Redis, remova do compose a aplicação.
 
 - Run ou Run Debug
-- Acessar a documentação da API no swagger
-    - ``http://localhost:8080/swagger-ui/index.html``
 
 ##### 3) Utilizando somente Docker compose
 
