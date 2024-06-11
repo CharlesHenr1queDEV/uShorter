@@ -8,6 +8,7 @@ import br.com.ushorter.model.UrlMapping;
 import br.com.ushorter.model.UrlMappingClick;
 import br.com.ushorter.repository.UrlMappingClickRepository;
 import br.com.ushorter.service.validation.ValidationClickQuantityService;
+import br.com.ushorter.util.UtilsUrl;
 
 @Service
 public class UrlMappingClickService {
@@ -31,9 +32,10 @@ public class UrlMappingClickService {
 	}
 
 	public int findQuantityClick(String shortUrl, String language) throws Exception {
-		validationClickQuantityService.executeValidations(shortUrl, language);
+		String hashFromUrl = UtilsUrl.extractHashFromUrl(shortUrl);
+		validationClickQuantityService.executeValidations(hashFromUrl, language);
 		
-		return urlMappingClickRepository.findByUrlMapping_ShortUrl(shortUrl).size();
+		return urlMappingClickRepository.findByUrlMapping_ShortUrl(hashFromUrl).size();
 	} 
 
 }

@@ -11,4 +11,17 @@ public record UrlMappingDTO(String originalUrl, String shortUrl) {
 
         return urlMapping;
     }
+    
+    public UrlMappingDTO withOriginalUrl(String originalUrl) {
+        return new UrlMappingDTO(originalUrl, this.shortUrl);
+    }
+    
+    public UrlMappingDTO withShortUrl(String shortUrl) {
+        return new UrlMappingDTO(this.originalUrl, shortUrl);
+    }
+    
+    
+    public UrlMappingDTO withConcatPrefixUrl(String prefix) {
+        return new UrlMappingDTO(this.originalUrl, prefix.concat(this.shortUrl));
+    }
 }

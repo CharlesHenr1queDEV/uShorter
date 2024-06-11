@@ -2,8 +2,9 @@ package br.com.ushorter.util;
 
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service
 public class URLService {
 
 	private static final int NUM_CHARS_SHORT_LINK = 7;
@@ -11,9 +12,6 @@ public class URLService {
 	private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	
 	private Random random = new Random();
-
-	@Value("${ROUTE_URL:valorPadrao}")
-	private String routeUrl;
 
 	public String generateRandomShortUrl() {
 		char[] result = new char[NUM_CHARS_SHORT_LINK];

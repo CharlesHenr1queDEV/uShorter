@@ -6,19 +6,19 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import br.com.ushorter.exception.ShortUrlNotExistsException;
-import br.com.ushorter.repository.UrlMappingClickRepository;
+import br.com.ushorter.repository.UrlMappingRepository;
 import br.com.ushorter.validation.interfaces.ClickQuantityValidationInterface;
 
 @Component
 public class ShortUrlNotExistsValidation implements ClickQuantityValidationInterface {
 
-	private UrlMappingClickRepository urlMappingClickRepository;
+	private UrlMappingRepository urlMappingRepository;
 
 	private MessageSource messageSource;
 
-	public ShortUrlNotExistsValidation(UrlMappingClickRepository urlMappingClickRepository, MessageSource messageSource) {
-		this.urlMappingClickRepository = urlMappingClickRepository;
+	public ShortUrlNotExistsValidation(MessageSource messageSource, UrlMappingRepository urlMappingRepository) {
 		this.messageSource = messageSource;
+		this.urlMappingRepository = urlMappingRepository;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class ShortUrlNotExistsValidation implements ClickQuantityValidationInter
 	}
 
 	public boolean isShortUrlPresent(String url) {
-		return urlMappingClickRepository.existsByUrlMapping_ShortUrl(url);
+		return urlMappingRepository.existsByShortUrl(url);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.com.ushorter.dto.OriginalUrlDTO;
@@ -26,6 +27,9 @@ public class UrlMappingService {
 	private ValidationRedirectUrlService validationRedirectUrlService;
 	private ValidationUrlMappingService validationUrlMappingService;
 	private RedisUrlMappingService redisUrlMappingService;
+	
+	@Value("${route.url}")
+	private String routeUrl;
 
 	public UrlMappingService(UrlMappingRepository urlMappingRepository, UrlMappingClickService urlMappingClickService,
 			ShortUrlGenerator shortUrlGenerator, ValidationRedirectUrlService validationRedirectUrlService, ValidationUrlMappingService validationUrlMappingService
@@ -38,7 +42,7 @@ public class UrlMappingService {
 		this.redisUrlMappingService = redisUrlMappingService;
 	}
 	
-	public UrlMapping saveUrlMapping(OriginalUrlDTO originalUrlRecord, String language) throws Exception {
+	public UrlMappingDTO saveUrlMapping(OriginalUrlDTO originalUrlRecord, String language) throws Exception {
 		logger.info("[URL SERVICE] Iniciando validação para geração de um url curto");
 		validationUrlMappingService.executeValidations(originalUrlRecord.url(), language);
 
@@ -48,10 +52,12 @@ public class UrlMappingService {
 		UrlMappingDTO urlMappingDTO = new UrlMappingDTO(originalUrlRecord.url(), shortUrl);
 		
 		logger.info("[URL SERVICE] Salvando registro no banco");
-		UrlMapping urlMapping = urlMappingRepository.save(urlMappingDTO.parseUrlMapping());
+		UrlMappingDTO urlMappingSaveDTO = urlMappingRepository.save(urlMappingDTO.parseUrlMapping())
+				.toUrlMappingDTO()
+				.withConcatPrefixUrl(routeUrl);
 		
 		logger.info("[URL SERVICE] Processamento finalizado, gerando url curta");
-		return urlMapping;
+		return urlMappingSaveDTO;
 	}
 	
 	public String redirectUrl(String shortUrl, String language) throws Exception {
@@ -84,11 +90,11 @@ public class UrlMappingService {
 	}
 	
 	public String generateShortUrl(String originalUrl) {
-		String shortUrl = shortUrlGenerator.generateHash(originalUrl);
+		String shortUrl = shortUrlGenerator.generateRandomShortUrl();
 
 		while (isExistShortUrl(shortUrl)) {
 			logger.info("[URL SERVICE]  Foi identificado um shortUrl com o mesmo valor, gerando um novo shortUrl");
-			shortUrl = shortUrlGenerator.generateHash(originalUrl);
+			shortUrl = shortUrlGenerator.generateRandomShortUrl();
 		}
 		
 		return shortUrl;

@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import br.com.ushorter.dto.OriginalUrlDTO;
 import br.com.ushorter.model.UrlMapping;
-import br.com.ushorter.model.UrlMappingClick;
-import br.com.ushorter.repository.UrlMappingClickRepository;
+import br.com.ushorter.repository.UrlMappingRepository;
 import br.com.ushorter.service.UrlMappingService;
 
 @AutoConfigureMockMvc
@@ -31,13 +30,12 @@ public class UrlMappingClickControllerTest {
 	private UrlMappingService urlMappingService;
 
 	@Autowired
-	private UrlMappingClickRepository urlMappingClickRepository;
+	private UrlMappingRepository urlMappingRepository;
 
 	@BeforeAll
 	public void setup() throws Exception {
 		OriginalUrlDTO originalUrlDTO = new OriginalUrlDTO("http://google.com");
-		UrlMapping saveUrlMapping = urlMappingService.saveUrlMapping(originalUrlDTO, "en");
-		urlMappingService.redirectUrl(saveUrlMapping.getShortUrl(), "en");
+		urlMappingService.saveUrlMapping(originalUrlDTO, "en");
 	}
 
 	@Test
@@ -48,23 +46,28 @@ public class UrlMappingClickControllerTest {
 	
 	@Test
 	public void findQuantityClick_whenShortUrlNull_thenError() throws Exception {
-		mock.perform(MockMvcRequestBuilders.get(END_POINT + "/{shortUrl}", "  ")).andDo(MockMvcResultHandlers.print())
-				.andExpect(MockMvcResultMatchers.status().isBadRequest());
+		mock.perform(MockMvcRequestBuilders.get(END_POINT)
+                .header("shortUrl", ""))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test
 	public void findQuantityClick_whenShortUrlNotExist_thenError() throws Exception {
-		mock.perform(MockMvcRequestBuilders.get(END_POINT + "/{shortUrl}", "notExist"))
-				.andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isBadRequest());
+		mock.perform(MockMvcRequestBuilders.get(END_POINT)
+				.header("shortUrl", "notExist"))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test
 	public void findQuantityClick_whenShortUrlIsExist_thenSucess() throws Exception {
-		UrlMappingClick urlMappingClick = urlMappingClickRepository.findAll().get(0);
-
-		mock.perform(
-				MockMvcRequestBuilders.get(END_POINT + "/{shortUrl}", urlMappingClick.getUrlMapping().getShortUrl()))
-				.andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk());
+		UrlMapping urlMapping = urlMappingRepository.findAll().get(0);
+		
+		mock.perform(MockMvcRequestBuilders.get(END_POINT)
+                .header("shortUrl", urlMapping.getShortUrl()))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 }

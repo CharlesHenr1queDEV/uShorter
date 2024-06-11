@@ -20,6 +20,7 @@ public class UrlMapping {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(columnDefinition = "LONGTEXT")
 	private String originalUrl;
 
 	@Column(nullable = false, unique = true)
