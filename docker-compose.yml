@@ -33,12 +33,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: BHU*nji9
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
 
-  # Angular frontend config
-  frontend:
-    image: ushorter-front:latest
-    container_name: ushorter-front
-    ports:
-      - "4200:4200"
 volumes:
   mysql_data:
 
