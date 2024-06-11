@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ShortUrlGenerator {
 
 	
-private static final int NUM_CHARS_SHORT_LINK = 7;
+	private static final int NUM_CHARS_SHORT_LINK = 7;
 	
 	private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	
